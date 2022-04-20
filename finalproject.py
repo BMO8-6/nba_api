@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+
 
 """
  * Name: Joshua Bih
@@ -34,7 +35,7 @@ from dateutil import parser
 
 def usage(exit_code=0):
     progname = os.path.basename(sys.argv[0])
-    print(f'''Usage: {progname} [-a ALPHABET -c CORES -l LENGTH -p PATH -s HASHES]
+    print('''Usage: {progname} [-a ALPHABET -c CORES -l LENGTH -p PATH -s HASHES]
     -a ALPHABET Alphabet to use in permutations
     -c CORES    CPU Cores to use
     -l LENGTH   Length of permutations
