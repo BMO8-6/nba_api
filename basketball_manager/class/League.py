@@ -60,8 +60,9 @@ class League:
         for i in self.order:
             if silent == 0:
                 print(f'{i.name}: {i.fantasy_predicted:0.2f}')
-            return_list.insert(0,(i.name,i.fantasy_predicted))
+            return_list = return_list + [(i.name,i.fantasy_predicted)] 
         
+        self.order = []
         return return_list
 
 
