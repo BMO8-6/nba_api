@@ -106,9 +106,13 @@ if __name__ == "__main__":
     compare = my_league.teams["fudruckers"].list_predictions(silent=1)
     agents = my_league.free_agent_list(silent=1)
 
-    print(compare)
-    print(agents)
-
-    
-        
-
+    # make suggestions to the player
+    print('\n' + "Based on your lineup and the available free agents, the following moves are recommended:")
+    optimized = 0
+    iter = 0
+    while optimized < 1:
+        if agents[iter][1] > compare[iter][1]:
+            print(" - You should add " + agents[iter][0] + " and drop " + compare[iter][0])
+            iter = iter + 1
+        else:
+            optimized = 1 
