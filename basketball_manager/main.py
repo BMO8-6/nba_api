@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+def give_suggestions():
+    update_status = dataloader.check_date(date,season=season) # return 1 if update needed
+
+    update_dir = 'csv_files/' + season
+    update_file = update_dir + '/update_data.csv'
+    update_data = next(csv.DictReader(open(update_file)))
 
 """
  * Name: Joshua Bih, Marco Tan, Tram Trinh, Chris Capone
@@ -26,6 +32,7 @@ import sys
 import pprint
 import pandas as pd
 import csv
+import tkinter
 
 from nba_api.stats.static import teams, players
 from nba_api.stats.endpoints import leaguegamefinder, playercareerstats
@@ -48,26 +55,30 @@ if __name__ == "__main__":
     season = '2021'
     # check if year matches
     dataloader.nba_schedule(season=season)  # will do nothing if schedule has been loaded
-    update_status = dataloader.update_data(season=season) # return 1 if update needed
+
+
+
+    date = '2022-03-20'
+    update_status = dataloader.check_date(date,season=season) # return 1 if update needed
+    
 
     update_dir = 'csv_files/' + season
     update_file = update_dir + '/update_data.csv'
     update_data = next(csv.DictReader(open(update_file)))
 
-    end_date = '2022-01-20'
-    thirty = dataloader.n_days(end_date,-30)
+    thirty = dataloader.n_days(date,-30)
 
     if update_status:
-        #end_date = dataloader.earlier_date(update_data['end'],update_data['update'])
-        #thirty = dataloader.n_days(end_date,-30)
+        #date = dataloader.earlier_date(update_data['end'],update_data['update'])
+        #thirty = dataloader.n_days(date,-30)
 
-        dataloader.get_nba_raw_data(thirty,end_date,season=season)
+        dataloader.get_nba_raw_data(thirty,date,season=season)
     
     # load players and game schedules
-    game_index = dataloader.get_games_for_week(end_date)
+    game_index = dataloader.get_games_for_week(date)
     players = dataloader.load_players()
 
-    my_league = League(end_date,game_index,players=players,capacity=5)
+    my_league = League(date,game_index,players=players,capacity=5)
     teams = ["fudruckers","destroyers", "jolly rogers", "trees"] 
 
     for team in teams:
@@ -110,9 +121,9 @@ if __name__ == "__main__":
     print('\n' + "Based on your lineup and the available free agents, the following moves are recommended:")
     optimized = 0
     iter = 0
-    while optimized < 1:
+    while optimized < 1 and iter < my_league.capacity:
         if agents[iter][1] > compare[iter][1]:
-            print(" - You should add " + agents[iter][0] + " and drop " + compare[iter][0])
+            print(f" - You should add {agents[iter][0]} ({agents[iter][1]}) and drop {compare[iter][0]} ({compare[iter][1]})")
             iter = iter + 1
         else:
             optimized = 1 

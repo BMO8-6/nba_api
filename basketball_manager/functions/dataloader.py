@@ -26,6 +26,7 @@ def nba_schedule(season='2021', save_path='csv_files'):
     # Write data to file specified by save_path and save_file, if it 
     # exists then return
     save_path = save_path + '/' + season
+    
     if not os.path.exists(save_path):
         os.makedirs(save_path)
         print(f'Directory {save_path} was created.\n\n')
@@ -102,7 +103,7 @@ def first_game(season='2021'):
     return start,end
     
 
-def update_data(season='2021'):
+def check_date(date,season='2021'):
     ''' Checks when file has last been updated '''
 
     update_dir = 'csv_files/' + season
@@ -116,10 +117,8 @@ def update_data(season='2021'):
     if not os.path.exists(update_file):
 
         start,end = first_game(season)
-        update = date.today()
-        update = update.strftime("%Y-%m-%d")
 
-        dictionary = {'start': start, 'end': end, 'update': update}
+        dictionary = {'start': start, 'end': end, 'update': date}
         field_names = ['start', 'end', 'update']
 
         with open(update_file, 'w') as file:
@@ -130,15 +129,13 @@ def update_data(season='2021'):
             return 1  # return 0 since no update data
 
     # Checks if date today matches with last update
-    today = date.today()
-    today = today.strftime("%Y-%m-%d")
     raw_data = next(csv.DictReader(open(update_file)))
 
-    if raw_data['update'] == today:
+    if raw_data['update'] == date:
         return 0  # does not need to be updated 
     else:
         field_names = ['start', 'end','update']
-        raw_data['update'] = today
+        raw_data['update'] = date
 
         with open(update_file, 'w') as file:
             writer = csv.DictWriter(file,fieldnames=field_names)

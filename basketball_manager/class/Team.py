@@ -20,6 +20,7 @@ class Team:
     
     def list_predictions(self,silent=0): # lists players and predictions
         self.sort_players()
+        total = 0
 
         return_list = []
 
@@ -27,10 +28,15 @@ class Team:
             if silent == 0:
                 print(f'{self.players[name].name} : {self.players[name].fantasy_predicted:0.2f}')
             return_list.append((self.players[name].name,self.players[name].fantasy_predicted))
+            total += self.players[name].fantasy_predicted
+        
+        if silent == 0:
+            print(f"Expected total: {total:0.2f}")
+            print()
         
         self.order = []
 
-        return return_list
+        return total, return_list
 
     def list_players(self): # lists teams and their players in sorted order
         print(f'{self.team_name}:\n')
